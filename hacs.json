@@ -1,4 +1,6 @@
 {
   "name": "Miele Extras",
-  "render_readme": true
+  "render_readme": true,
+  "zip_release": true,
+  "filename": "miele_extras.zip"
 }
