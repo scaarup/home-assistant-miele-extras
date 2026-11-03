@@ -1,4 +1,4 @@
-"""Binær sensor: er der firmwareopdatering til apparatet? (RemoteUpdate fra appen)"""
+"""Binary sensor: is a firmware update available for the appliance? (RemoteUpdate in the app)"""
 from __future__ import annotations
 
 from homeassistant.components.binary_sensor import BinarySensorDeviceClass, BinarySensorEntity

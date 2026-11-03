@@ -1,4 +1,4 @@
-"""Kamera for apparater, hvor appen har en aktiv kamera-service (fx ovnen)."""
+"""Camera for appliances where the app has an active camera service (e.g. the oven)."""
 from __future__ import annotations
 
 import logging
@@ -48,7 +48,7 @@ class MieleExtrasCamera(MieleExtrasEntity, Camera):
                 if self._last_ok
                 else None
             ),
-            "note": "Kameraet leverer det sidst gemte billede; er apparatet slukket, kan det være ældre.",
+            "note": "The camera serves the last stored image; if the appliance is off it may be old.",
         }
 
     async def async_camera_image(
@@ -61,7 +61,7 @@ class MieleExtrasCamera(MieleExtrasEntity, Camera):
             self._last_image = await self.coordinator.api.async_get_image(self._device_id)
             self._last_ok = time.time()
         except MieleAuthError:
-            _LOGGER.error("Miele Extras: login afvist, token skal fornyes")
+            _LOGGER.error("Miele Extras: login rejected, the token must be replaced")
         except MieleApiError as err:
             _LOGGER.warning("Miele Extras kamera: %s", err)
         return self._last_image

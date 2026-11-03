@@ -1,4 +1,4 @@
-"""Klient til Miele@mobile-API. Ingen Home Assistant-importer, så den kan testes alene."""
+"""Client for the Miele@mobile API. No Home Assistant imports, so it can be tested standalone."""
 from __future__ import annotations
 
 import logging
@@ -14,11 +14,11 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class MieleAuthError(Exception):
-    """Refresh-tokenet er afvist (udløbet eller trukket tilbage)."""
+    """The refresh token was rejected (expired or revoked)."""
 
 
 class MieleApiError(Exception):
-    """Andre fejl fra Miele."""
+    """Other errors from Miele."""
 
 
 class MieleExtrasApi:
@@ -50,11 +50,11 @@ class MieleExtrasApi:
                 timeout=aiohttp.ClientTimeout(total=30),
             ) as resp:
                 if resp.status in (400, 401, 403):
-                    raise MieleAuthError(f"Token afvist (HTTP {resp.status})")
+                    raise MieleAuthError(f"Token rejected (HTTP {resp.status})")
                 resp.raise_for_status()
                 body = await resp.json(content_type=None)
         except aiohttp.ClientError as err:
-            raise MieleApiError(f"Token-kald fejlede: {err}") from err
+            raise MieleApiError(f"Token request failed: {err}") from err
         self._access_token = body["access_token"]
         self._expires_at = time.time() + int(body.get("expires_in", 3600))
         new = body.get("refresh_token")
@@ -82,15 +82,15 @@ class MieleExtrasApi:
                         self._access_token = None
                         continue
                     if resp.status == 401:
-                        raise MieleAuthError("Adgang afvist af API")
+                        raise MieleAuthError("Access rejected by the API")
                     resp.raise_for_status()
                     return await resp.read() if binary else await resp.json(content_type=None)
             except aiohttp.ClientError as err:
-                raise MieleApiError(f"Kald til {path} fejlede: {err}") from err
-        raise MieleApiError("Ukendt fejl")
+                raise MieleApiError(f"Request to {path} failed: {err}") from err
+        raise MieleApiError("Unknown error")
 
     async def async_get_devices(self) -> dict[str, dict[str, Any]]:
-        """Alle apparater på kontoen: {serienummer: {"tech_type":..., "device_type":...}}."""
+        """All appliances on the account: {serial number: {"tech_type": ..., "device_type": ...}}."""
         groups = await self._async_get("/V2/Devices", "application/json")
         out: dict[str, dict[str, Any]] = {}
         for group in groups if isinstance(groups, list) else []:

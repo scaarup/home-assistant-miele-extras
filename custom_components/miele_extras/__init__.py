@@ -1,4 +1,4 @@
-"""Miele Extras: funktioner fra Miele-appens API, som den officielle integration ikke har."""
+"""Miele Extras: features from the Miele app API that the official integration lacks."""
 from __future__ import annotations
 
 import logging
@@ -20,7 +20,7 @@ PLATFORMS = ["camera", "binary_sensor", "sensor"]
 
 
 class MieleExtrasCoordinator(DataUpdateCoordinator[dict[str, dict[str, Any]]]):
-    """Henter apparatliste og services ({serienr: {"tech_type", "services"}})."""
+    """Fetches the appliance list and services ({serial: {"tech_type", "services"}})."""
 
     def __init__(self, hass: HomeAssistant, entry: ConfigEntry, api: MieleExtrasApi) -> None:
         super().__init__(
