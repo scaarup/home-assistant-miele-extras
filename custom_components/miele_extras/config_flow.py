@@ -1,10 +1,9 @@
-"""Config flow: indtast refresh-token fra Miele@mobile. Én opsætning for hele kontoen."""
+"""Config flow: enter the Miele@mobile refresh token. One entry covers the whole account."""
 from __future__ import annotations
 
 from typing import Any
 
 import voluptuous as vol
-
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 

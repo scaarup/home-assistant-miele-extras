@@ -1,5 +1,10 @@
 # Miele Extras for Home Assistant
 
+[![Validate](https://github.com/scaarup/home-assistant-miele-extras/actions/workflows/validate.yml/badge.svg)](https://github.com/scaarup/home-assistant-miele-extras/actions/workflows/validate.yml)
+[![Release](https://img.shields.io/github/v/release/scaarup/home-assistant-miele-extras)](https://github.com/scaarup/home-assistant-miele-extras/releases)
+[![HACS](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://hacs.xyz)
+[![License: MIT](https://img.shields.io/github/license/scaarup/home-assistant-miele-extras)](LICENSE)
+
 A custom integration that adds features from the Miele app that the official
 [Miele integration](https://www.home-assistant.io/integrations/miele/) does not expose.
 It runs **alongside** the official integration and does not change it.
@@ -35,22 +40,42 @@ remove Miele Extras, nothing changes for the official integration.
 
 ## Requirements
 
-- Home Assistant 2025.x or newer
-- The official Miele integration set up (recommended, so the "Connected via" link has a target)
-- A refresh token for your Miele app account (entered once in the setup form)
+- Home Assistant. Developed and tested on 2026.10; older versions are not tested.
+- The official Miele integration set up (recommended, so the "Connected via" link has a target).
+- A refresh token for your Miele app account (entered once in the setup form).
+- [HACS](https://hacs.xyz) if you want to install through it (optional).
 
 ## Installation
 
-### HACS (custom repository)
+### Option 1: HACS (recommended)
 
-1. In HACS, open the menu and choose **Custom repositories**.
-2. Add `https://github.com/scaarup/home-assistant-miele-extras` with category **Integration**.
-3. Install **Miele Extras** and restart Home Assistant.
+This repository is not in the default HACS store, so you add it as a **custom repository**.
+The repository must be public for HACS to be able to read it.
 
-### Manual
+1. Make sure HACS is installed and set up in Home Assistant (see the [HACS documentation](https://hacs.xyz/docs/use/)).
+2. Click this button to open the repository in HACS, then click **Download**:
 
-1. Copy the `custom_components/miele_extras` folder into your Home Assistant `config/custom_components/` directory.
-2. Restart Home Assistant.
+   [![Open your Home Assistant instance and open this repository in HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=scaarup&repository=home-assistant-miele-extras&category=integration)
+
+   Or add it by hand:
+   1. In Home Assistant, open **HACS**.
+   2. Click the three-dot menu in the top right corner and choose **Custom repositories**.
+   3. In **Repository**, enter `https://github.com/scaarup/home-assistant-miele-extras`.
+   4. In **Type** (or **Category**), choose **Integration**, then click **Add**.
+   5. Close the dialog, find **Miele Extras** in HACS, open it and click **Download**.
+3. **Restart Home Assistant** (Settings > System > Restart).
+4. Continue with [Setup](#setup).
+
+HACS installs the latest release. When a new release is published, HACS shows an update for
+Miele Extras; install it and restart Home Assistant. You can also enable HACS update notifications
+under **Settings > Devices & services > HACS**.
+
+### Option 2: Manual
+
+1. Download `miele_extras.zip` from the [latest release](https://github.com/scaarup/home-assistant-miele-extras/releases/latest).
+2. Unpack it into `config/custom_components/miele_extras/` in your Home Assistant configuration
+   directory, so that `config/custom_components/miele_extras/manifest.json` exists.
+3. Restart Home Assistant.
 
 ## Setup
 
@@ -91,6 +116,26 @@ logger:
   logs:
     custom_components.miele_extras: debug
 ```
+
+## Development and releases
+
+Every pull request runs three checks: **hassfest** (Home Assistant's integration validator),
+**HACS validation** and **lint** (ruff plus a compile check).
+
+Releases are automatic. To publish one:
+
+1. Open a pull request that raises `version` in `custom_components/miele_extras/manifest.json`
+   (semantic versioning, for example `2.1.0`; a version with a suffix such as `2.1.0-beta.1` is
+   published as a pre-release).
+2. When the checks pass, merge it.
+3. A workflow then creates the tag `v<version>` and a GitHub release with generated release notes
+   and a `miele_extras.zip` asset. HACS and manual installs pick it up from there.
+
+Pull requests labelled `enhancement`, `bug`, `maintenance` and so on are grouped in the release notes.
+
+## License
+
+[MIT](LICENSE)
 
 ## Disclaimer
 

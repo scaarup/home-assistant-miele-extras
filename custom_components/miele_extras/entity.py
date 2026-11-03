@@ -1,4 +1,4 @@
-"""Fælles basis: enhed pr. Miele-apparat, knyttet til den officielle enhed via via_device."""
+"""Shared base: one device per Miele appliance, linked to the official device via via_device."""
 from __future__ import annotations
 
 from homeassistant.helpers.device_registry import DeviceInfo
@@ -15,7 +15,8 @@ class MieleExtrasEntity(CoordinatorEntity[MieleExtrasCoordinator]):
         super().__init__(coordinator)
         self._device_id = device_id
         tech = coordinator.data[device_id]["tech_type"]
-        # En enhed hører til én integration; derfor egen enhed + via_device til den officielle.
+        # A device belongs to a single integration, so we create our own device and link it to the
+        # official one with via_device.
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, device_id)},
             via_device=(MIELE_DOMAIN, device_id),

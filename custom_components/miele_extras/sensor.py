@@ -1,4 +1,4 @@
-"""Sensorer for Mieles CareStatus (vedligehold, fx opvaskemaskinens pakning og dør)."""
+"""Sensors for Miele CareStatus (maintenance, e.g. a dishwasher's seal and door)."""
 from __future__ import annotations
 
 from typing import Any

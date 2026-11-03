@@ -1,18 +1,18 @@
 {
   "domain": "miele_extras",
   "name": "Miele Extras",
+  "after_dependencies": [
+    "miele"
+  ],
   "codeowners": [
     "@scaarup"
   ],
   "config_flow": true,
-  "single_config_entry": true,
-  "after_dependencies": [
-    "miele"
-  ],
   "documentation": "https://github.com/scaarup/home-assistant-miele-extras",
   "integration_type": "service",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/scaarup/home-assistant-miele-extras/issues",
   "requirements": [],
+  "single_config_entry": true,
   "version": "2.0.0"
 }

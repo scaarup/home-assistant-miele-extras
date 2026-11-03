@@ -3,19 +3,19 @@
     "step": {
       "user": {
         "title": "Miele Extras",
-        "description": "Funktioner fra Miele-appens API, som den officielle integration ikke har (kamera, firmware-status, vedligehold). Fungerer sammen med den officielle Miele-integration og ændrer den ikke.",
+        "description": "Features from the Miele app API that the official integration does not offer (camera, firmware status, maintenance). Works alongside the official Miele integration and does not change it.",
         "data": {
-          "refresh_token": "Refresh-token (Miele@mobile)"
+          "refresh_token": "Refresh token (Miele app)"
         }
       }
     },
     "error": {
-      "invalid_auth": "Tokenet blev afvist af Miele.",
-      "cannot_connect": "Kunne ikke nå Miele.",
-      "no_devices": "Miele svarede, men kontoen har ingen apparater."
+      "invalid_auth": "The token was rejected by Miele.",
+      "cannot_connect": "Could not reach Miele.",
+      "no_devices": "Miele responded, but the account has no appliances."
     },
     "abort": {
-      "already_configured": "Miele Extras er allerede sat op."
+      "already_configured": "Miele Extras is already set up."
     }
   },
   "entity": {
