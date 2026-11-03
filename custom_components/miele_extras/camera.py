@@ -39,6 +39,7 @@ class MieleExtrasCamera(MieleExtrasEntity, Camera):
         self._last_image: bytes | None = None
         self._last_fetch = 0.0
         self._last_ok: float | None = None
+        self._fetch_failed = False
 
     @property
     def extra_state_attributes(self) -> dict[str, str | None]:
@@ -48,20 +49,39 @@ class MieleExtrasCamera(MieleExtrasEntity, Camera):
                 if self._last_ok
                 else None
             ),
-            "note": "The camera serves the last stored image; if the appliance is off it may be old.",
+            "note": "The camera serves the newest stored image; if the appliance is off it may be old. After a failed fetch the camera is unavailable instead of showing an old image.",
         }
+
+    @property
+    def available(self) -> bool:
+        return super().available and not self._fetch_failed
 
     async def async_camera_image(
         self, width: int | None = None, height: int | None = None
     ) -> bytes | None:
+        """Return a fresh image, or None. Never serve an old image after a failed fetch."""
         if self._last_image and time.time() - self._last_fetch < MIN_IMAGE_INTERVAL:
             return self._last_image
         self._last_fetch = time.time()
         try:
-            self._last_image = await self.coordinator.api.async_get_image(self._device_id)
-            self._last_ok = time.time()
+            image = await self.coordinator.api.async_get_image(self._device_id)
         except MieleAuthError:
             _LOGGER.error("Miele Extras: login rejected, the token must be replaced")
+            self._mark_failed()
+            return None
         except MieleApiError as err:
-            _LOGGER.warning("Miele Extras kamera: %s", err)
-        return self._last_image
+            _LOGGER.warning("Miele Extras camera: %s", err)
+            self._mark_failed()
+            return None
+        self._last_image = image
+        self._last_ok = time.time()
+        if self._fetch_failed:
+            self._fetch_failed = False
+            self.async_write_ha_state()
+        return image
+
+    def _mark_failed(self) -> None:
+        self._last_image = None
+        if not self._fetch_failed:
+            self._fetch_failed = True
+            self.async_write_ha_state()
