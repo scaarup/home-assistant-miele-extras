@@ -15,3 +15,6 @@ MIELE_DOMAIN = "miele"
 
 UPDATE_INTERVAL_MIN = 15
 MIN_IMAGE_INTERVAL = 20  # seconds between camera images
+
+OVEN_DEVICE_TYPE = 12  # Miele DeviceType of ovens
+OVEN_POLL_SECONDS = 60
