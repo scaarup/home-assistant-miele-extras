@@ -23,6 +23,7 @@ entities are only created for appliances that actually support a feature.
 | `camera` | Camera | Still image from an appliance with a built-in camera (for example an oven with a camera). |
 | `binary_sensor` | Firmware update available | Whether the appliance has a remote firmware update waiting, plus an "update in progress" attribute. |
 | `sensor` | Care status | Maintenance status per component (for example a dishwasher's appliance and seal/door care), with last and next required care time when Miele reports them. |
+| `climate` | Oven | Thermostat for an oven: shows the current and target temperature of the running program and lets you change the target (30-280 °C, as in the app). The oven cannot be switched on/off or change program from here. Unavailable while no program is running. |
 
 More features from the app can be added as new platforms.
 
@@ -93,13 +94,14 @@ Entity names are generated from the appliance model, for example:
 - `camera.<appliance>_extras_camera`
 - `binary_sensor.<appliance>_extras_firmware_update_available`
 - `sensor.<appliance>_extras_care_<component>`
+- `climate.<appliance>_extras` (ovens)
 
 You can rename entities and devices in Home Assistant as usual.
 
 ## Limitations
 
 - Private, undocumented API: behaviour can change without notice.
-- Data is polled every 15 minutes (the camera image is fetched on demand).
+- Data is polled every 15 minutes (the camera image is fetched on demand). A running oven's temperature is polled every minute.
 - New appliances or newly enabled services are picked up when the integration is reloaded.
 
 ## Troubleshooting

@@ -16,7 +16,7 @@ from .const import CONF_REFRESH_TOKEN, DOMAIN, UPDATE_INTERVAL_MIN
 
 _LOGGER = logging.getLogger(__name__)
 
-PLATFORMS = ["camera", "binary_sensor", "sensor"]
+PLATFORMS = ["camera", "binary_sensor", "sensor", "climate"]
 
 
 class MieleExtrasCoordinator(DataUpdateCoordinator[dict[str, dict[str, Any]]]):

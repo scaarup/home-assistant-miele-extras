@@ -33,6 +33,11 @@
       "care_status": {
         "name": "Care {component}"
       }
+    },
+    "climate": {
+      "oven": {
+        "name": "Oven"
+      }
     }
   }
 }

@@ -33,6 +33,11 @@
       "care_status": {
         "name": "Vedligehold {component}"
       }
+    },
+    "climate": {
+      "oven": {
+        "name": "Ovn"
+      }
     }
   }
 }
