@@ -124,16 +124,17 @@ logger:
 Every pull request runs three checks: **hassfest** (Home Assistant's integration validator),
 **HACS validation** and **lint** (ruff plus a compile check).
 
-Releases are automatic. To publish one:
+Releases are drafted automatically:
 
-1. Open a pull request that raises `version` in `custom_components/miele_extras/manifest.json`
-   (semantic versioning, for example `2.1.0`; a version with a suffix such as `2.1.0-beta.1` is
-   published as a pre-release).
-2. When the checks pass, merge it.
-3. A workflow then creates the tag `v<version>` and a GitHub release with generated release notes
-   and a `miele_extras.zip` asset. HACS and manual installs pick it up from there.
-
-Pull requests labelled `enhancement`, `bug`, `maintenance` and so on are grouped in the release notes.
+1. Merge pull requests as usual. Label them `enhancement` (new feature, minor bump), `bug` or
+   `fix` (patch), or `breaking` (major bump); labels also group the release notes.
+   [Release Drafter](https://github.com/release-drafter/release-drafter) keeps a **draft release**
+   up to date with every merge to `main`, with the next version number already worked out.
+2. When you want to publish, open the draft under *Releases*, check the notes and press **Publish**.
+3. Publishing creates the tag `v<version>`; a workflow then writes that version into `manifest.json`
+   inside `miele_extras.zip` and uploads it to the release. HACS installs that zip, so the version
+   Home Assistant shows always matches the release. The `version` in `manifest.json` on `main` is
+   therefore not edited by hand and may lag behind.
 
 ## License
 
