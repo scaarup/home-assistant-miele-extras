@@ -49,17 +49,22 @@ class MieleExtrasCamera(MieleExtrasEntity, Camera):
                 if self._last_ok
                 else None
             ),
-            "note": "The camera serves the newest stored image; if the appliance is off it may be old. After a failed fetch the camera is unavailable instead of showing an old image.",
+            "last_fetch_failed": self._fetch_failed,
+            "note": (
+                "The camera serves the newest stored image; if the appliance is off it may be "
+                "old. After a failed fetch no image is served (never an old one); the next "
+                "request tries again."
+            ),
         }
-
-    @property
-    def available(self) -> bool:
-        return super().available and not self._fetch_failed
 
     async def async_camera_image(
         self, width: int | None = None, height: int | None = None
     ) -> bytes | None:
-        """Return a fresh image, or None. Never serve an old image after a failed fetch."""
+        """Return a fresh image, or None. Never serve an old image after a failed fetch.
+
+        The entity stays available on purpose: an unavailable camera is never asked for an
+        image again, so it could not recover by itself after a short outage.
+        """
         if self._last_image and time.time() - self._last_fetch < MIN_IMAGE_INTERVAL:
             return self._last_image
         self._last_fetch = time.time()
