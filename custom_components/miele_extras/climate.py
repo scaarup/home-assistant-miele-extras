@@ -35,10 +35,19 @@ async def async_setup_entry(
     entities = []
     for dev_id, dev in coordinator.data.items():
         if dev.get("device_type") == OVEN_DEVICE_TYPE:
-            oven = MieleOvenCoordinator(hass, entry, coordinator.api, dev_id)
-            await oven.async_refresh()
+            oven = await async_get_oven_coordinator(hass, entry, coordinator, dev_id)
             entities.append(MieleOvenClimate(coordinator, oven, dev_id))
     async_add_entities(entities)
+
+
+async def async_get_oven_coordinator(hass, entry, coordinator, dev_id: str) -> MieleOvenCoordinator:
+    """One oven poller per appliance, shared by the climate and sensor platforms."""
+    ovens = coordinator.__dict__.setdefault("ovens", {})
+    if dev_id not in ovens:
+        oven = MieleOvenCoordinator(hass, entry, coordinator.api, dev_id)
+        await oven.async_refresh()
+        ovens[dev_id] = oven
+    return ovens[dev_id]
 
 
 class MieleOvenCoordinator(DataUpdateCoordinator[dict[str, Any]]):
@@ -111,11 +120,16 @@ class MieleOvenClimate(MieleExtrasEntity, ClimateEntity):
 
     @property
     def current_temperature(self) -> float | None:
-        return self._proc.get("current_c") or None
+        return self._proc.get("current_c")
 
     @property
     def target_temperature(self) -> float | None:
         return self._proc.get("target_c") or None
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        remaining = self._proc.get("remaining_s")
+        return {"remaining_time": remaining // 60 if remaining is not None else None}
 
     async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
         if hvac_mode != HVACMode.HEAT:

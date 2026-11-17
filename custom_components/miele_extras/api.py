@@ -14,6 +14,16 @@ from .const import API_BASE, CLIENT_ID, TOKEN_URL, UA_API, UA_AUTH
 _LOGGER = logging.getLogger(__name__)
 
 
+def _valid_celsius(raw: int) -> float | None:
+    """Centi-degrees to degC; 0xFFFF (and 0) means the oven has no reading."""
+    return None if raw in (0, 0xFFFF) else raw / 100
+
+
+def _valid_seconds(raw: int | None) -> int | None:
+    """Remaining program time in seconds; 0xFFFF means not set."""
+    return None if raw in (None, 0xFFFF) else raw
+
+
 class MieleAuthError(Exception):
     """The refresh token was rejected (expired or revoked)."""
 
@@ -154,7 +164,8 @@ class MieleExtrasApi:
         temp = params.get(4, {}).get(6, {})  # parameter 6 = temperature
         return {
             "program_id": proc.get(28, 0),
-            "current_c": proc.get(6, {}).get(2, 0) / 100,
+            "current_c": _valid_celsius(proc.get(6, {}).get(2, 0)),
+            "remaining_s": _valid_seconds(proc.get(4, {}).get(2)),
             "target_c": proc.get(21, {}).get(2, 0) / 100,
             "min_c": temp.get(2, 3000) / 100,
             "max_c": temp.get(3, 25000) / 100,
