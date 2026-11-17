@@ -32,6 +32,9 @@
     "sensor": {
       "care_status": {
         "name": "Vedligehold {component}"
+      },
+      "oven_remaining_time": {
+        "name": "Resterende tid"
       }
     },
     "climate": {

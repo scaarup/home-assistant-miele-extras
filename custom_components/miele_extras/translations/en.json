@@ -32,6 +32,9 @@
     "sensor": {
       "care_status": {
         "name": "Care {component}"
+      },
+      "oven_remaining_time": {
+        "name": "Remaining time"
       }
     },
     "climate": {
