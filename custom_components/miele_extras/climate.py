@@ -40,7 +40,7 @@ async def async_setup_entry(
     async_add_entities(entities)
 
 
-async def async_get_oven_coordinator(hass, entry, coordinator, dev_id: str) -> "MieleOvenCoordinator":
+async def async_get_oven_coordinator(hass, entry, coordinator, dev_id: str) -> MieleOvenCoordinator:
     """One oven poller per appliance, shared by the climate and sensor platforms."""
     ovens = coordinator.__dict__.setdefault("ovens", {})
     if dev_id not in ovens:
